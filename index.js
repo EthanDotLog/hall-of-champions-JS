@@ -1,6 +1,6 @@
 //import files to work with database - listing off the functions of each i will need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+import { getDatabase, ref, push, onValue, update } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
 //setting database location
 const appSettings = {
@@ -18,36 +18,37 @@ const userFromEl = document.querySelector("#user-from-el");
 const userToEl = document.querySelector("#user-to-el");
 
 //code return locations
-const returnsSectionEl = document.querySelector("#returns-section-el")
 const pulledToEl= document.querySelector("#pulled-to-el");
 const pulledCommentEl = document.querySelector("#pulled-comment-el");
 const pulledFromEl = document.querySelector("#pulled-from-el");
-const userLikesEl = document.querySelector("#pulled-likes-el");
 const consoleContainerEl = document.querySelector("#console-container-el")
+const likeNumberEl = document.querySelector("#like-number-el")
 
-
-//buttons
-const iconBtn = document.querySelector("#icon-btn");
+//button identifier
 const SubmitBtn = document.querySelector("#Submit-btn");
 
+//need likes button
+//need likes button function
 
-SubmitBtn.addEventListener("click", function() {
+//submit button - adds inputs into an array and sends it to the database
+SubmitBtn.addEventListener("click", function(event) {
     const userInputsArray = {}
     userInputsArray["userTo"] = userToEl.value;
     userInputsArray["userFrom"] = userFromEl.value;
     userInputsArray["userComment"] = userCommentEl.value;
+    userInputsArray["likes"] = 0;
     push(championsInDB, userInputsArray)
+    clearUserInput()
+    console.log(event)
 })
 
+//compares page values to database with a snapshot. if database has info it is printed out, if not it makes the user champions block empty
 onValue(championsInDB, function(snapshot) {
     if (snapshot.exists()) {
         let storedUserData = Object.entries(snapshot.val())
-        console.log("snapshot value " + snapshot.val()) 
         clearUserPosts()
         for (let i = 0; i < storedUserData.length; i++) {
             let currentItem = storedUserData[i];
-            let currentItemValue = currentItem[1]
-            let currentItemId = currentItem[0]
             makeElement(currentItem)
         }
     } else {
@@ -55,34 +56,90 @@ onValue(championsInDB, function(snapshot) {
     }
 }) 
 
+
+
+//main function - make element out of id
 function makeElement(id) {
-    let userObject = id[1]
-    let makeTo = userObject["userTo"]
-    let makeFrom = userObject["userFrom"]
-    let makeComment = userObject["userComment"]
+    //pulled data from array saved to a variable
+    const objectId = id[0]
+    const userObject = id[1]
+    const userId = id[0]
+    let editLikes = userObject['likes']
 
+    console.log(editLikes)
+
+
+    //setting the variable from object to its own variable
+    const makeTo = userObject["userTo"]
+    const makeFrom = userObject["userFrom"]
+    const makeComment = userObject["userComment"]
+    const makeLikes = editLikes
+
+    //make elements
     let newToEl = document.createElement("h3")
-    newToEl.textContent = makeTo;
     let newFromEl = document.createElement("h3")
-    newFromEl.textContent = makeFrom;
     let newCommentEl = document.createElement("p")
-    newCommentEl.textContent = makeComment;
-
+    let newFromLikeDivEL = document.createElement("div")
+    let likeRatioDivEl = document.createElement("div")
+    let likeImgEl = document.createElement("img")
+    let likeCountEl = document.createElement("h3")
     const newElement = window.document.createElement('div');
+
+    //set element values
+    newToEl.textContent = makeTo;
+    newFromEl.textContent = makeFrom;
+    newCommentEl.textContent = makeComment;
+    likeCountEl.textContent = makeLikes
+
+    //set element attributes
+    newFromLikeDivEL.setAttribute("class", "from-like-div-el")
+    likeRatioDivEl.setAttribute("class", "ratio-container-el")
+    likeRatioDivEl.setAttribute("id", `${userId}`)
+    likeRatioDivEl.setAttribute("role", "button")
+    newFromEl.setAttribute("id", "ratio-container-from-el")
+
+    likeRatioDivEl.addEventListener("click", function() {
+        editLikes += 1;
+        let locationDB = ref(database, `champions/${objectId}`)
+        update(locationDB, {likes: editLikes,})
+    })
+
+        
+        /* const object = await Object.findOne({ id: 1 });
+        object.values[0] += 1
+         */
+
+    likeImgEl.setAttribute("src", "./assets/like.png") 
+    likeImgEl.setAttribute("id", "like-img-el-btn")
+    likeCountEl.setAttribute("id", "like-number-el")
     newElement.classList.add('userPosts');
-    newElement.append(newToEl, newFromEl, newCommentEl)
+
+    //put new elements into the container
+    newElement.append(newToEl, newCommentEl, newFromLikeDivEL)
+    newFromLikeDivEL.append(newFromEl, likeRatioDivEl)
+    likeRatioDivEl.append(likeImgEl, likeCountEl)
+
+    //print new page section onto page
     window.document.querySelector("#console-container-el").appendChild(newElement)
+
 }
 
 
-/*function updateHTML(input) {
-    let itemId= input[0]
-    let itemValue= input[1]
-    let newToEl = document.createElement('li');
-    newToEl.textContent = itemValue
-} */
 
+
+
+
+//other functions
+
+//clears user inputs 
+function clearUserInput() {
+    userToEl.value = "";
+    userFromEl.value = "";
+    userCommentEl.value = ""
+}
 function clearUserPosts() {
     consoleContainerEl.innerHTML = "";
 }
-
+function test() {
+    console.log("see this")
+}

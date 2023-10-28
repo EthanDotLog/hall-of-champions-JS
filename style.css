@@ -1,3 +1,4 @@
+/* getting rid of the default padding and setting whole page boarder */ 
 * {
     margin: 0;
     padding: 0;
@@ -6,46 +7,109 @@
 body {
     background-color: #2C001E;
     border: 10px solid #c8d3a3;
+    width: 100%;
 }
 
+/* making all containers flex and setting width */
 #hero-container, #user-input-container, #console-container-el {
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 4% 0;
 }
 
+/* hero section */
 #hero-container img {
     width: 40%;
     max-width: 500px;
+    padding-bottom: 2%;
 }
 
 
-
-
-
+/* user input section */
 #user-input-container {
     gap: 20px;
+    display: flex;
+    padding: 2% 0;
+    margin: 0 auto;
 }
 #user-comment-el {
-    width: 40%;
+    width: 75%;
     height: 100px;
 }
 .user-from-to-el {
     display: flex;
-    justify-content: center;
-    gap: 3.5%;
-    width: 100%;
+    justify-content: space-between;
+    width: 75%;
 }
 #Submit-btn {
-    width: 40%;
+    width: 75%;
     line-height: 30px;
 }
 #user-from-el, #user-to-el {
-    width: 18%;
+    width: 45%;
     line-height: 30px;
 }
 
+
+/* console container for user posts */
+#console-container-el {
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 20px;
+}
+
+.userPosts {
+    display: flex;
+    width: 75%;
+    flex-direction: column;
+    border: 2px solid #1cd61c;
+    align-items: start;
+    width: 75%;
+}
+
+.userPosts h3 {
+    padding-left: 2%;
+}
+
+.userPosts p {
+    padding-left: 2%;
+}
+
+.from-like-div-el {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 20%;
+}
+#ratio-container-from-el {
+    width: 100%;
+}
+.from-like-div-el h3 {
+    display: flex;
+    align-items: center;
+}
+
+.ratio-container-el {
+    display: flex;
+    justify-content: flex-end;
+    width: 10%;
+
+}
+.ratio-container-el img{
+    width: 50%;
+}
+.ratio-container-el h3{
+    padding-left: 10px;
+    width: 50%;
+}
+
+
+
+
+
+/* mobile friendly  */
 @media (max-width: 500px) {
     #hero-container img {
         width: 60%;
