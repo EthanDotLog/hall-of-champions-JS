@@ -1,0 +1,53 @@
+* {
+    margin: 0;
+    padding: 0;
+    color: 	#1cd61c;
+}
+body {
+    background-color: #2C001E;
+    border: 10px solid #c8d3a3;
+}
+
+#hero-container, #user-input-container, #console-container-el {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#hero-container img {
+    width: 40%;
+    max-width: 500px;
+}
+
+
+
+
+
+#user-input-container {
+    gap: 20px;
+}
+#user-comment-el {
+    width: 40%;
+    height: 100px;
+}
+.user-from-to-el {
+    display: flex;
+    justify-content: center;
+    gap: 3.5%;
+    width: 100%;
+}
+#Submit-btn {
+    width: 40%;
+    line-height: 30px;
+}
+#user-from-el, #user-to-el {
+    width: 18%;
+    line-height: 30px;
+}
+
+@media (max-width: 500px) {
+    #hero-container img {
+        width: 60%;
+    }
+  }
